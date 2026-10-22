@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Study & Career Copilot — OptiMind Learning Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- App Shell Container -->
+  <div class="app-layout">
+
+    <!-- 1. LEFT SIDEBAR NAVIGATION (Matching Reference Image 1) -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <!-- Brand Logo -->
+      <div class="sidebar-brand" onclick="navigateTo('dashboard')">
+        <div class="brand-badge-icon">⚡</div>
+        <div class="brand-info">
+          <span class="brand-name">OptiMind</span>
+          <span class="brand-tag">AI Study Copilot</span>
+        </div>
+      </div>
+
+      <!-- Overview Menu -->
+      <div class="sidebar-section">
+        <span class="sidebar-section-title">OVERVIEW</span>
+        <nav class="sidebar-nav">
+          <button class="nav-item active" id="nav-dashboard" onclick="navigateTo('dashboard')">
+            <span class="nav-icon">📊</span>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" id="nav-learn" onclick="navigateTo('learn')">
+            <span class="nav-icon">📖</span>
+            <span>Learn</span>
+          </button>
+          <button class="nav-item" id="nav-practice" onclick="navigateTo('practice')">
+            <span class="nav-icon">⚡</span>
+            <span>Practice</span>
+          </button>
+          <button class="nav-item" id="nav-assignment" onclick="navigateTo('assignment')">
+            <span class="nav-icon">📝</span>
+            <span>Assignment</span>
+          </button>
+          <button class="nav-item" id="nav-test" onclick="navigateTo('test')">
+            <span class="nav-icon">🎯</span>
+            <span>Assessment</span>
+          </button>
+          <button class="nav-item" id="nav-results" onclick="navigateTo('results')">
+            <span class="nav-icon">📑</span>
+            <span>Results</span>
+          </button>
+          <button class="nav-item" id="nav-targeted" onclick="navigateTo('targeted')">
+            <span class="nav-icon">🔍</span>
+            <span>Targeted Practice</span>
+          </button>
+          <button class="nav-item" id="nav-progress" onclick="navigateTo('progress')">
+            <span class="nav-icon">📈</span>
+            <span>Progress Matrix</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Active Topic Card in Sidebar -->
+      <div class="sidebar-active-topic-card">
+        <div class="active-topic-header">
+          <span class="active-pulse"></span>
+          <span class="active-label">Active Learning Topic</span>
+        </div>
+        <div class="active-topic-title" id="sidebar-active-topic">Python Functions</div>
+        <div class="active-topic-level-badge" id="sidebar-active-level">Beginner</div>
+      </div>
+
+      <!-- Sidebar User Footer -->
+      <div class="sidebar-user-footer">
+        <div class="user-avatar-mini">🎓</div>
+        <div class="user-details">
+          <span class="user-name">Kate Ashy</span>
+          <span class="user-role">Copilot Pro Plan</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 2. MAIN APP WORKSPACE (Center Stage) -->
+    <div class="app-workspace">
+
+      <!-- Top Header Bar -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button class="mobile-toggle-btn" onclick="toggleSidebar()">☰</button>
+          <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input 
+              type="text" 
+              id="topbar-search-input" 
+              placeholder="Search courses, lessons, topics..." 
+              autocomplete="off"
+              onkeydown="if(event.key === 'Enter'){ quickSearchTopic(this.value); }"
+            />
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="topbar-topic-pill">
+            <span class="pill-dot"></span>
+            <span id="topbar-topic-label">Python Functions • Beginner</span>
+          </div>
+          <button class="topbar-icon-btn" title="Refresh Progress" onclick="loadProgress()">🔄</button>
+          <button class="topbar-icon-btn" title="Notifications">🔔</button>
+          <div class="topbar-profile-pill">
+            <div class="profile-avatar-circle">KA</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Toast Notification Container -->
+      <div id="toast" class="toast hidden"></div>
+
+      <!-- Main Stage Container -->
+      <main class="stage-container">
+
+        <!-- ==================== DASHBOARD VIEW (Reference Image 1) ==================== -->
+        <section id="view-dashboard" class="view active">
+          
+          <!-- Hero Banner with Gradient & AI Sparkles -->
+          <div class="lms-hero-card">
+            <div class="hero-content-col">
+              <span class="hero-chip">✨ AI-Powered Personalized Mastery</span>
+              <h1 class="hero-title">Enhance your learning with AI</h1>
+              <p class="hero-description">
+                Experience closed-loop technical learning. Master concepts through AI synthesis, 
+                validate with guided practice, solve applied scenario assignments, and diagnose 
+                weak areas with scored assessments.
+              </p>
+
+              <!-- Topic Selection Form -->
+              <form id="topic-form" class="hero-topic-form" onsubmit="handleStartLearning(event)">
+                <div class="hero-form-row">
+                  <div class="hero-input-box">
+                    <span class="hero-input-icon">🎯</span>
+                    <input 
+                      type="text" 
+                      id="topic-input" 
+                      placeholder="Enter any topic (e.g., Python Functions, SQL Joins, REST APIs)..." 
+                      value="Python Functions"
+                      required
+                    />
+                  </div>
+
+                  <div class="hero-select-box">
+                    <select id="difficulty-select">
+                      <option value="Beginner" selected>Beginner Level</option>
+                      <option value="Intermediate">Intermediate Level</option>
+                      <option value="Advanced">Advanced Level</option>
+                    </select>
+                  </div>
+
+                  <button type="submit" class="btn btn-hero-cta">
+                    <span>Start Learning</span>
+                    <span class="arrow-icon">→</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+            
+            <div class="hero-graphic-col">
+              <div class="floating-ai-dialog">
+                <div class="dialog-header">
+                  <span class="ai-sparkle">✦</span>
+                  <span>AI Copilot Active</span>
+                </div>
+                <div class="dialog-body">
+                  "Ready to guide your conceptual breakdown, interactive drills, and personalized targeted practice."
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Continue Learning (Course Cards matching Image 1) -->
+          <div class="lms-section-header">
+            <div>
+              <h2 class="section-heading">Continue Learning</h2>
+              <p class="section-subheading">Jump directly into your active modules or explore popular engineering tracks.</p>
+            </div>
+            <div class="carousel-nav-arrows">
+              <button class="arrow-btn" onclick="quickSelect('Python Functions', 'Beginner')">‹</button>
+              <button class="arrow-btn" onclick="quickSelect('SQL Joins', 'Intermediate')">›</button>
+            </div>
+          </div>
+
+          <div class="course-cards-grid">
+            <!-- Card 1: Python Functions -->
+            <div class="course-card" onclick="quickSelect('Python Functions', 'Beginner')">
+              <div class="course-thumbnail thumb-python">
+                <span class="thumb-badge">Python</span>
+                <span class="thumb-icon">🐍</span>
+              </div>
+              <div class="course-body">
+                <h3 class="course-title">Python Functions & Modularity</h3>
+                <span class="course-mentor">Core Software Engineering</span>
+                <div class="course-progress-wrapper">
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: 75%;"></div>
+                  </div>
+                  <div class="progress-meta">
+                    <span class="progress-pct">75% Complete</span>
+                    <span class="progress-action">Resume →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: SQL Joins -->
+            <div class="course-card" onclick="quickSelect('SQL Joins', 'Intermediate')">
+              <div class="course-thumbnail thumb-sql">
+                <span class="thumb-badge">Databases</span>
+                <span class="thumb-icon">🗄️</span>
+              </div>
+              <div class="course-body">
+                <h3 class="course-title">Relational SQL Joins & Sets</h3>
+                <span class="course-mentor">Data Engineering & Analytics</span>
+                <div class="course-progress-wrapper">
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: 40%;"></div>
+                  </div>
+                  <div class="progress-meta">
+                    <span class="progress-pct">40% Complete</span>
+                    <span class="progress-action">Resume →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: REST API Design -->
+            <div class="course-card" onclick="quickSelect('REST API Design', 'Intermediate')">
+              <div class="course-thumbnail thumb-api">
+                <span class="thumb-badge">Architecture</span>
+                <span class="thumb-icon">🌐</span>
+              </div>
+              <div class="course-body">
+                <h3 class="course-title">REST API Design & Protocols</h3>
+                <span class="course-mentor">Backend Systems</span>
+                <div class="course-progress-wrapper">
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" style="width: 20%;"></div>
+                  </div>
+                  <div class="progress-meta">
+                    <span class="progress-pct">20% Complete</span>
+                    <span class="progress-action">Resume →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: Milestones & Study Activity (Matching Image 1) -->
+          <div class="dashboard-analytics-row">
+            
+            <!-- Milestones Card -->
+            <div class="lms-panel-card flex-1">
+              <div class="panel-card-header">
+                <h3>Learning Path Milestones</h3>
+                <span class="badge-accent">Closed-Loop Flow</span>
+              </div>
+              <div class="milestones-list">
+                <div class="milestone-item">
+                  <div class="milestone-icon-circle done">✔</div>
+                  <div class="milestone-info">
+                    <strong>1. Conceptual Synthesis</strong>
+                    <span>Master core mental models and code patterns</span>
+                  </div>
+                  <span class="milestone-status-badge success">Completed</span>
+                </div>
+                <div class="milestone-item">
+                  <div class="milestone-icon-circle active">⚡</div>
+                  <div class="milestone-info">
+                    <strong>2. Guided Practice & Hints</strong>
+                    <span>Interactive drills with pedagogical feedback</span>
+                  </div>
+                  <span class="milestone-status-badge active">In Progress</span>
+                </div>
+                <div class="milestone-item">
+                  <div class="milestone-icon-circle pending">📝</div>
+                  <div class="milestone-info">
+                    <strong>3. Applied Practical Assignment</strong>
+                    <span>Scenario problem solving and decision making</span>
+                  </div>
+                  <span class="milestone-status-badge pending">Next Up</span>
+                </div>
+                <div class="milestone-item">
+                  <div class="milestone-icon-circle pending">🎯</div>
+                  <div class="milestone-info">
+                    <strong>4. Diagnostic Assessment</strong>
+                    <span>Secure evaluation and weak area detection</span>
+                  </div>
+                  <span class="milestone-status-badge pending">Locked</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Activity Chart Card (Matching Image 1) -->
+            <div class="lms-panel-card flex-1">
+              <div class="panel-card-header">
+                <div>
+                  <h3>Study Activity</h3>
+                  <div class="activity-highlight">
+                    <span class="big-metric-num" id="dash-activity-metric">Active</span>
+                    <span class="metric-caption">Learning Streak</span>
+                  </div>
+                </div>
+                <div class="panel-dropdown">
+                  <span>Last 7 days ▼</span>
+                </div>
+              </div>
+
+              <!-- Bar Chart with Empty State Support -->
+              <div class="activity-bars-container" id="activity-bars-container">
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 35%;"></div></div>
+                  <span class="bar-day">Mon</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 55%;"></div></div>
+                  <span class="bar-day">Tue</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 20%;"></div></div>
+                  <span class="bar-day">Wed</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 40%;"></div></div>
+                  <span class="bar-day">Thu</span>
+                </div>
+                <div class="bar-col active-day">
+                  <div class="bar-track"><div class="bar-fill active" style="height: 90%;"></div></div>
+                  <span class="bar-day font-bold">Fri</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 15%;"></div></div>
+                  <span class="bar-day">Sat</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-track"><div class="bar-fill" style="height: 60%;"></div></div>
+                  <span class="bar-day">Sun</span>
+                </div>
+              </div>
+
+              <div id="activity-empty-state" class="empty-state-text hidden">
+                No study activity recorded this week yet. Start your first topic to build your activity streak!
+              </div>
+
+              <div class="panel-card-footer">
+                <div class="footer-stat">
+                  <span>Topics Studied</span>
+                  <strong id="dash-topics-count">0</strong>
+                </div>
+                <div class="footer-stat">
+                  <span>Tests Completed</span>
+                  <strong id="dash-tests-count">0</strong>
+                </div>
+                <div class="footer-stat">
+                  <span>Average Score</span>
+                  <strong id="dash-avg-score">--</strong>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================== STAGE WORKSPACE (Reference Image 2 Style) ==================== -->
+        <!-- Used for Learn, Practice, Assignment, Assessment, Results, Targeted Practice -->
+        <div id="stage-workspace" class="stage-workspace hidden">
+          
+          <!-- Collapsible Dark Curriculum Drawer (Matching Image 2) -->
+          <aside class="curriculum-drawer" id="curriculum-drawer">
+            <div class="drawer-header">
+              <button class="drawer-toggle-btn" onclick="toggleCurriculumDrawer()">☰ Hide</button>
+              <span class="drawer-badge">Curriculum Flow</span>
+            </div>
+
+            <!-- Course Title & Learner Progress Card -->
+            <div class="drawer-course-card">
+              <h4 id="drawer-topic-title">Python Functions</h4>
+              <div class="drawer-user-row">
+                <div class="drawer-user-avatar">🎓</div>
+                <span class="drawer-user-name">Kate Ashy</span>
+              </div>
+              <div class="drawer-progress-track">
+                <div class="drawer-progress-fill" id="drawer-progress-bar" style="width: 20%;"></div>
+              </div>
+              <span class="drawer-pct-label" id="drawer-pct-label">20% Completed</span>
+            </div>
+
+            <!-- 6 Stages Navigation Accordion Items (Matching Image 2) -->
+            <div class="curriculum-modules-list">
+              <!-- Stage 1: Learn -->
+              <div class="curriculum-item" id="curriculum-step-learn" onclick="navigateTo('learn')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-learn">✔</span>
+                  <div class="step-text-meta">
+                    <strong>1. Concept Synthesis</strong>
+                    <span>Foundations & Code Patterns</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage 2: Practice -->
+              <div class="curriculum-item" id="curriculum-step-practice" onclick="navigateTo('practice')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-practice">⚡</span>
+                  <div class="step-text-meta">
+                    <strong>2. Guided Practice</strong>
+                    <span>Interactive Drills & Hints</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage 3: Assignment -->
+              <div class="curriculum-item" id="curriculum-step-assignment" onclick="navigateTo('assignment')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-assignment">📝</span>
+                  <div class="step-text-meta">
+                    <strong>3. Practical Assignment</strong>
+                    <span>Applied Problem Scenarios</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage 4: Assessment -->
+              <div class="curriculum-item" id="curriculum-step-test" onclick="navigateTo('test')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-test">🎯</span>
+                  <div class="step-text-meta">
+                    <strong>4. Knowledge Evaluation</strong>
+                    <span>Scored Diagnostic Exam</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage 5: Results -->
+              <div class="curriculum-item" id="curriculum-step-results" onclick="navigateTo('results')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-results">📑</span>
+                  <div class="step-text-meta">
+                    <strong>5. Diagnostic Results</strong>
+                    <span>Score & Concept Mapping</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stage 6: Targeted Remediation -->
+              <div class="curriculum-item" id="curriculum-step-targeted" onclick="navigateTo('targeted')">
+                <div class="curriculum-item-content">
+                  <span class="step-icon-indicator" id="step-icon-targeted">🔍</span>
+                  <div class="step-text-meta">
+                    <strong>6. Targeted Remediation</strong>
+                    <span>Weak Concept Drill</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Stage Right Content Area -->
+          <div class="stage-content-area">
+
+            <!-- 2. LEARN VIEW -->
+            <section id="view-learn" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb" id="learn-breadcrumb">Stage 1 of 6 • Foundations</div>
+                  <h2 id="learn-topic-title">Topic Explanation</h2>
+                </div>
+                <div class="stage-nav-actions">
+                  <button class="btn btn-outline" onclick="navigateTo('dashboard')">← Back to Dashboard</button>
+                  <button class="btn btn-primary" onclick="proceedToPractice()">Next: Practice Questions →</button>
+                </div>
+              </div>
+
+              <div id="learn-loading" class="loader-container hidden">
+                <div class="spinner"></div>
+                <p>AI is synthesizing conceptual breakdown, code patterns, and key takeaways...</p>
+              </div>
+
+              <div id="learn-content" class="lms-content-card">
+                <div class="explanation-box" id="learn-explanation"></div>
+
+                <div class="content-divider"></div>
+
+                <h3 class="subsection-title">Key Takeaways & Core Rules</h3>
+                <ul class="key-points-list" id="learn-key-points"></ul>
+
+                <div class="content-divider"></div>
+
+                <h3 class="subsection-title">Practical Code Examples</h3>
+                <div id="learn-examples"></div>
+
+                <div class="stage-bottom-cta">
+                  <p>Ready to test your understanding interactively?</p>
+                  <button class="btn btn-primary btn-large" onclick="proceedToPractice()">
+                    Proceed to Practice Questions →
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 3. PRACTICE VIEW (Interactive Stepper & Hints matching Image 2) -->
+            <section id="view-practice" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb" id="practice-breadcrumb">Stage 2 of 6 • Guided Practice</div>
+                  <h2 id="practice-topic-title">Interactive Practice Drills</h2>
+                </div>
+                <div class="stage-nav-actions">
+                  <button class="btn btn-outline" onclick="navigateTo('learn')">← Back to Learn</button>
+                  <button class="btn btn-outline" onclick="loadPracticeQuestions()">Restart Practice</button>
+                </div>
+              </div>
+
+              <div id="practice-loading" class="loader-container hidden">
+                <div class="spinner"></div>
+                <p>Generating interactive practice questions and hints...</p>
+              </div>
+
+              <!-- Question Stepper Progress -->
+              <div id="practice-stepper-bar" class="stepper-progress-bar">
+                <div class="stepper-indicator-text" id="practice-stepper-text">Question 1 of 3</div>
+                <div class="stepper-track">
+                  <div class="stepper-fill" id="practice-stepper-fill" style="width: 33%;"></div>
+                </div>
+              </div>
+
+              <!-- Active Practice Question Card Container -->
+              <div id="practice-container" class="quiz-stage-container">
+                <!-- Single active question card rendered here -->
+              </div>
+
+              <!-- Practice Completion Card (Shown when all questions finished) -->
+              <div id="practice-completion-card" class="lms-content-card completion-card hidden">
+                <div class="completion-icon-large">🎉</div>
+                <h2>Practice Completed!</h2>
+                <p id="practice-completion-message">You have completed all practice questions and reinforced core concepts.</p>
+                <div class="completion-score-badge" id="practice-completion-stats">3 of 3 Questions Answered Correctly</div>
+                <div class="completion-cta-row">
+                  <button class="btn btn-outline" onclick="restartPractice()">Try Practice Again</button>
+                  <button class="btn btn-primary btn-large" id="btn-practice-to-assignment" onclick="proceedToAssignment()">
+                    Continue to Assignment 📝 →
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 4. ASSIGNMENT VIEW (Scenario Problem Solving matching Image 2) -->
+            <section id="view-assignment" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb">Stage 3 of 6 • Applied Scenarios</div>
+                  <h2 id="assignment-topic-title">Practical Problem-Solving Assignment</h2>
+                </div>
+                <div class="stage-nav-actions">
+                  <button class="btn btn-outline" onclick="navigateTo('practice')">← Back to Practice</button>
+                  <button id="btn-assignment-next" class="btn btn-primary hidden" onclick="proceedToAssessment()">
+                    Proceed to Assessment 🎯 →
+                  </button>
+                </div>
+              </div>
+
+              <!-- Assignment Instructions Banner -->
+              <div class="assignment-intro-card">
+                <h3 id="assignment-title">Scenario Assignment</h3>
+                <p id="assignment-instructions">
+                  Analyze each production scenario and choose the most robust engineering solution. All questions are required before submitting.
+                </p>
+              </div>
+
+              <div id="assignment-loading" class="loader-container hidden">
+                <div class="spinner"></div>
+                <p>Generating applied scenario assignment questions...</p>
+              </div>
+
+              <!-- Assignment Questions List -->
+              <div id="assignment-content">
+                <div id="assignment-questions-container" class="quiz-stage-container">
+                  <!-- Assignment question cards -->
+                </div>
+
+                <div class="submit-action-bar" id="assignment-submit-bar">
+                  <button id="btn-submit-assignment" class="btn btn-primary btn-large" onclick="submitAssignment()">
+                    Submit Assignment
+                  </button>
+                </div>
+
+                <!-- Assignment Evaluated Results Display -->
+                <div id="assignment-results-container" class="lms-content-card hidden" style="margin-top: 2rem;">
+                  <div class="assignment-score-banner">
+                    <div class="score-dial-circle" id="assignment-score-circle">
+                      <span class="dial-pct" id="assignment-score-percent">0%</span>
+                      <span class="dial-fraction" id="assignment-score-fraction">0 / 0</span>
+                    </div>
+                    <div class="feedback-col">
+                      <h3 id="assignment-score-verdict">Assignment Result</h3>
+                      <p id="assignment-feedback-text" class="feedback-lead"></p>
+                      <button class="btn btn-primary btn-large" style="margin-top: 1rem;" onclick="proceedToAssessment()">
+                        Proceed to Assessment 🎯 →
+                      </button>
+                    </div>
+                  </div>
+
+                  <h3 class="subsection-title" style="margin-top: 1.5rem;">Detailed Scenario Review</h3>
+                  <div id="assignment-review-container" class="quiz-stage-container" style="margin-top: 1rem;">
+                    <!-- Question reviews matching Image 2 -->
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- 5. TEST (ASSESSMENT) VIEW -->
+            <section id="view-test" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb">Stage 4 of 6 • Knowledge Evaluation</div>
+                  <h2 id="test-topic-title">Scored Assessment Exam</h2>
+                </div>
+                <div class="stage-nav-actions">
+                  <button class="btn btn-outline" onclick="navigateTo('assignment')">← Back to Assignment</button>
+                  <span class="badge-status" id="test-progress-indicator">4 Questions</span>
+                </div>
+              </div>
+
+              <div id="test-loading" class="loader-container hidden">
+                <div class="spinner"></div>
+                <p>Generating randomized secure assessment questions...</p>
+              </div>
+
+              <div id="test-content">
+                <div id="test-questions-container" class="quiz-stage-container">
+                  <!-- Assessment questions -->
+                </div>
+
+                <div class="submit-action-bar">
+                  <button id="btn-submit-test" class="btn btn-primary btn-large" onclick="submitAssessment()">
+                    Submit Assessment for AI Evaluation
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 6. RESULTS VIEW (Diagnostic Report) -->
+            <section id="view-results" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb">Stage 5 of 6 • Diagnostic Report</div>
+                  <h2>Assessment Diagnostic Analysis</h2>
+                </div>
+                <button class="btn btn-outline" onclick="navigateTo('dashboard')">Back to Dashboard</button>
+              </div>
+
+              <div class="results-dashboard-grid">
+                <div class="score-card-lms">
+                  <div class="score-dial-circle" id="score-circle">
+                    <span class="dial-pct" id="results-score-percent">0%</span>
+                    <span class="dial-fraction" id="results-score-fraction">0 / 0</span>
+                  </div>
+                  <h3 id="results-verdict">Evaluation Complete</h3>
+                  <p id="results-summary"></p>
+                </div>
+
+                <div class="lms-content-card flex-1">
+                  <h3 class="subsection-title">Sub-Concept Performance Breakdown</h3>
+                  <p class="card-caption">Each question tests a specific underlying concept to isolate knowledge gaps.</p>
+                  <div id="concept-analysis-list" class="concept-breakdown-list"></div>
+                </div>
+              </div>
+
+              <!-- Weak Concepts Remediation Callout -->
+              <div id="weak-concepts-banner" class="remediation-callout-banner hidden">
+                <div class="remediation-text-col">
+                  <h3>⚠️ Knowledge Gaps Isolated</h3>
+                  <p id="weak-concepts-text">We found specific concepts that require reinforcement.</p>
+                </div>
+                <button class="btn btn-warning btn-large" onclick="startTargetedPractice()">
+                  Start Targeted Practice On Weak Concept →
+                </button>
+              </div>
+
+              <!-- Question Review Section (Image 2 style) -->
+              <div class="review-section-wrapper">
+                <h3 class="subsection-title">Question-by-Question Review</h3>
+                <div id="results-question-review" class="quiz-stage-container"></div>
+              </div>
+            </section>
+
+            <!-- 7. TARGETED PRACTICE VIEW (Personalized Remediation) -->
+            <section id="view-targeted" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb">Stage 6 of 6 • Personalized Remediation</div>
+                  <h2 id="targeted-concept-title">Targeted Concept Drill</h2>
+                </div>
+                <button class="btn btn-outline" onclick="navigateTo('results')">← Back to Results</button>
+              </div>
+
+              <div id="targeted-loading" class="loader-container hidden">
+                <div class="spinner"></div>
+                <p>Generating personalized remediation drill...</p>
+              </div>
+
+              <div id="targeted-content" class="lms-content-card">
+                <div class="remedial-box" id="targeted-explanation"></div>
+
+                <div class="content-divider"></div>
+
+                <h3 class="subsection-title">Reinforcement Code Pattern</h3>
+                <div id="targeted-example"></div>
+
+                <div class="content-divider"></div>
+
+                <h3 class="subsection-title">Targeted Mini-Drill</h3>
+                <div id="targeted-drill-container" class="quiz-stage-container"></div>
+
+                <div class="stage-bottom-cta">
+                  <p>Once you've reinforced this concept, retest the topic to measure your improvement!</p>
+                  <button class="btn btn-primary btn-large" onclick="retestTopic()">
+                    Retest Topic Assessment 🎯
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- 8. PROGRESS VIEW (Cumulative Analytics) -->
+            <section id="view-progress" class="view">
+              <div class="stage-view-header">
+                <div>
+                  <div class="stage-breadcrumb">Analytics • Persistent Mastery Matrix</div>
+                  <h2>Cumulative Learning Journey</h2>
+                </div>
+                <button class="btn btn-outline" onclick="loadProgress()">Refresh Data</button>
+              </div>
+
+              <div class="stats-overview-grid">
+                <div class="stat-box">
+                  <span class="stat-box-label">Total Attempts</span>
+                  <span class="stat-box-val" id="prog-total-attempts">0</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-label">Overall Accuracy</span>
+                  <span class="stat-box-val" id="prog-overall-acc">0%</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-label">Mastered Concepts</span>
+                  <span class="stat-box-val text-success" id="prog-mastered-count">0</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-box-label">Concepts Needing Work</span>
+                  <span class="stat-box-val text-danger" id="prog-weak-count">0</span>
+                </div>
+              </div>
+
+              <div class="progress-details-grid">
+                <div class="lms-content-card">
+                  <h3 class="subsection-title">Concept Mastery Matrix</h3>
+                  <div id="progress-concept-matrix" class="matrix-list"></div>
+                </div>
+
+                <div class="lms-content-card">
+                  <h3 class="subsection-title">Recent Assessment History</h3>
+                  <div id="progress-history-list" class="history-list"></div>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- 3. RIGHT SIDEBAR (Schedule & Daily Focus matching Reference Image 1) -->
+    <aside class="app-schedule-panel" id="app-schedule-panel">
+      <!-- User Greeting & Motivation -->
+      <div class="schedule-greeting-card">
+        <div class="greeting-avatar">🎓</div>
+        <div class="greeting-text">
+          <h4 id="greeting-title">Good Day, Kate! 👋</h4>
+          <p>Your focus today brings you one step closer to mastery.</p>
+        </div>
+      </div>
+
+      <!-- Calendar Strip Component -->
+      <div class="schedule-calendar-widget">
+        <div class="calendar-month-row">
+          <span class="calendar-month-name" id="cal-month-name">October, 2026</span>
+          <span class="calendar-nav-icon">📅</span>
+        </div>
+        <div class="calendar-days-row" id="calendar-days-strip">
+          <!-- Populated dynamically: 7 days strip with active day highlighted -->
+        </div>
+      </div>
+
+      <!-- Learning Flow Schedule Timeline (Image 1 style) -->
+      <div class="schedule-timeline-section">
+        <span class="schedule-section-title">TODAY'S FLOW</span>
+        
+        <div class="timeline-card active">
+          <div class="timeline-meta">
+            <span class="timeline-type">Module • LIVE</span>
+            <span class="timeline-time">Step 1</span>
+          </div>
+          <strong class="timeline-title">Concept Synthesis</strong>
+          <span class="timeline-desc">Foundations & Syntax Breakdown</span>
+        </div>
+
+        <div class="timeline-card">
+          <div class="timeline-meta">
+            <span class="timeline-type">Workshop</span>
+            <span class="timeline-time">Step 2</span>
+          </div>
+          <strong class="timeline-title">Guided Practice</strong>
+          <span class="timeline-desc">Pedagogical Drills & Hints</span>
+        </div>
+
+        <div class="timeline-card">
+          <div class="timeline-meta">
+            <span class="timeline-type">Applied Case</span>
+            <span class="timeline-time">Step 3</span>
+          </div>
+          <strong class="timeline-title">Scenario Assignment</strong>
+          <span class="timeline-desc">Production Decision-Making</span>
+        </div>
+
+        <div class="timeline-card">
+          <div class="timeline-meta">
+            <span class="timeline-type">Assessment</span>
+            <span class="timeline-time">Step 4</span>
+          </div>
+          <strong class="timeline-title">Diagnostic Exam</strong>
+          <span class="timeline-desc">Isolating Weak Knowledge Gaps</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
